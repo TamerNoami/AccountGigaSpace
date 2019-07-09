@@ -27,7 +27,7 @@ public class BookOrderComponentClientIntegrationTest {
 
     @Test
     public void testCreatingBookOrder(){
-        BookOrderComponentClient bookOrderComponentClient =  BookOrderComponentIntegrationTestSuite.getImportContext().getBeans(BookOrderComponentClient.class);
+        BookOrderComponentClient bookOrderComponentClient = BookOrderComponentIntegrationTestSuite.getImportContext().getBean(BookOrderComponentClient.class);
         bookOrderComponentClient.createOrder(BookOrderTestBuilder.builder().build());
 
        Assert.assertEquals(1,BookOrderComponentIntegrationTestSuite.getExportContext().getBean(GigaSpace.class).count(BookOrderEntity.templateBuilder().build()));

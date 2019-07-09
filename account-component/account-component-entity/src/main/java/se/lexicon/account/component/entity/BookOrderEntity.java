@@ -53,7 +53,7 @@ public class BookOrderEntity extends IdEntity<String> {
         return accountId;
     }
 
-    private void setSsn(String accountId) {
+    private void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 

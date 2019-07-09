@@ -6,7 +6,7 @@ import se.lexicon.account.component.domain.BookOrder;
 import se.lexicon.account.component.entity.BookOrderEntity;
 import se.lexicon.account.componment.dao.BookOrderDao;
 
-@ServiceExport({AccountComponentService.class})
+@ServiceExport({BookOrderComponentService.class})
 public class BookOrderComponentServiceImpl implements BookOrderComponentService {
 
 
