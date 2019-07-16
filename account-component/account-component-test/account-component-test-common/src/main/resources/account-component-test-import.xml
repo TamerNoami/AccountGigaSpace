@@ -11,7 +11,6 @@
         <constructor-arg name="imports">
             <list>
                 <value type="java.lang.Class">se.lexicon.account.component.service.AccountComponentServiceProvider</value>
-                <value type="java.lang.Class">se.lexicon.account.component.service.BookOrderComponentServiceProvider</value>
             </list>
         </constructor-arg>
         <constructor-arg name="serviceRegistryClient" ref="serviceRegistryApiClient"/>

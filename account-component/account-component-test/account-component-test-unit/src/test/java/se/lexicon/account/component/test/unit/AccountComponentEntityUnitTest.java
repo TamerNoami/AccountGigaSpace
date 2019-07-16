@@ -11,7 +11,7 @@ import org.junit.experimental.categories.Category;
 @Category(UnitTest.class)
 public class AccountComponentEntityUnitTest {
 
-    private static final String PACKAGE_NAME = "se.lexicon.account.component.test.common.entity";
+    private static final String PACKAGE_NAME = "com.lexicon.account.component.test.common.entity";
 
     @Test
     public void testDomainCompliance() {

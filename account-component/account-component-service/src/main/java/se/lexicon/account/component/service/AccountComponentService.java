@@ -1,11 +1,16 @@
 package se.lexicon.account.component.service;
 
-import se.lexicon.account.component.domain.Account;
-import se.lexicon.account.component.domain.AccountTransaction;
-import se.lexicon.account.component.domain.CreateAccountBalanceRequest;
-import se.lexicon.account.component.domain.AccountBalance;
-import se.lexicon.account.component.domain.CreateAccountTransactionRequest;
+
+import com.lexicon.account.component.domain.Account;
+import com.lexicon.account.component.domain.Order;
+import com.so4it.gs.rpc.Broadcast;
+import com.so4it.gs.rpc.RemoteResultReducer;
 import com.so4it.gs.rpc.Routing;
+import com.so4it.gs.rpc.exception.ResultReducerException;
+import com.so4it.gs.rpc.remoting.RemoteResult;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountComponentService {
 
@@ -14,6 +19,24 @@ public interface AccountComponentService {
     //account.hashCode() % numberOfPartitions
     void createAccount(@Routing("getSsn") Account account);
 
+    //account.hashCode() % numberOfPartitions
+    Account getAccount(@Routing String ssn);
+
+
+    @Broadcast(reducer =  BigDecimalRemoteResultReducer.class)
+    BigDecimal getTotalAmountOnAccounts();
+
+    Boolean placeOrder(@Routing("getSsn") Account account,Order order);
+
+
+
+    public static class BigDecimalRemoteResultReducer implements RemoteResultReducer<BigDecimal>{
+
+        @Override
+        public BigDecimal reduce(List<RemoteResult<BigDecimal>> list) throws ResultReducerException {
+            return BigDecimal.valueOf( list.stream().map( rr -> rr.getResult().doubleValue()).reduce(0.0,Double::sum));
+        }
+    }
 
 
 

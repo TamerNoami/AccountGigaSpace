@@ -1,30 +1,75 @@
 package se.lexicon.account.component.service;
 
-import se.lexicon.account.component.domain.Account;
-import se.lexicon.account.component.entity.AccountEntity;
-import se.lexicon.account.component.entity.AccountTransactionEntity;
-import se.lexicon.account.component.domain.AccountTransaction;
-import se.lexicon.account.component.domain.CreateAccountTransactionRequest;
-import se.lexicon.account.component.mapper.AccountBalanceMapper;
-import se.lexicon.account.component.mapper.AccountTransactionMapper;
-import se.lexicon.account.component.domain.CreateAccountBalanceRequest;
-import se.lexicon.account.component.domain.AccountBalance;
-import se.lexicon.account.componment.dao.AccountDao;
+import com.lexicon.account.component.domain.Account;
+import com.lexicon.account.component.domain.Order;
+import com.lexicon.account.component.entity.OrderEntity;
+import com.seb.account.componment.dao.OrderDao;
 import com.so4it.common.util.object.Required;
 import com.so4it.gs.rpc.ServiceExport;
+import com.lexicon.account.component.entity.AccountEntity;
+import com.seb.account.componment.dao.AccountDao;
+
+import java.math.BigDecimal;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ServiceExport({AccountComponentService.class})
 public class AccountComponentServiceImpl implements AccountComponentService {
 
     private final AccountDao accountDao;
 
-    public AccountComponentServiceImpl(AccountDao accountDao) {
+
+
+    private final OrderDao orderDao;
+
+    public AccountComponentServiceImpl(AccountDao accountDao,OrderDao orderDao) {
         this.accountDao = Required.notNull(accountDao, "accountDao");
+        this.orderDao = Required.notNull(orderDao, "orderDao");
     }
 
     @Override
     public void createAccount(Account account) {
-        AccountEntity  accountEntity = AccountEntity.builder().withSsn(account.getSsn()).withAmount(account.getAmount()).build();
+        AccountEntity accountEntity = AccountEntity.builder().withId(account.getSsn()).withAmount(account.getAmount()).build();
         accountDao.insert(accountEntity);
+
+        account.getOrders().stream().map(order -> OrderEntity.builder().withSsn(account.getSsn()).withAmount(order.getAmount()).build())
+                .forEach(orderDao::insert);
+    }
+
+
+    @Override
+    public Account getAccount(String ssn) {
+        AccountEntity accountEntity = accountDao.read(ssn);
+
+        //where ssn =  ssn
+        Set<OrderEntity> orderEntities = orderDao.readAll(OrderEntity.templateBuilder().withSsn(ssn).build());
+
+
+        return Account.builder().withSsn(ssn).withAmount(accountEntity.getAmount()).withId(accountEntity.getId())
+                .withOrders(orderEntities.stream().map(entity -> Order.builder().withOrderBookId("").withAmount(entity.getAmount()).build()).collect(Collectors.toSet()))
+                .build();
+
+    }
+
+
+    @Override
+    public BigDecimal getTotalAmountOnAccounts() {
+        Set<AccountEntity> entities = accountDao.readAll();
+        return BigDecimal.valueOf( entities.stream().map( rr -> rr.getAmount().doubleValue()).reduce(0.0,Double::sum));
+    }
+
+
+    @Override
+    public Boolean placeOrder(Account account,Order order) {
+        if((account.getAmount().subtract(order.getAmount())).doubleValue()>0) {
+            OrderEntity orderEntity = OrderEntity.builder().withAmount(order.getAmount())
+                    .withId(order.getOrderBookId()).withSsn(account.getSsn()).build();
+            AccountEntity accountEntity = AccountEntity.builder().withId(account.getId()).withAmount(account.getAmount().subtract(order.getAmount())).build();
+            accountDao.insertOrUpdate(accountEntity);
+            orderDao.insert(orderEntity);
+            return true;
+        }
+
+        return false;
     }
 }

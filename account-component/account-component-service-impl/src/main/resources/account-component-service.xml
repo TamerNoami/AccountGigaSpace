@@ -5,10 +5,7 @@
 
     <bean id="accountComponentService" class="se.lexicon.account.component.service.AccountComponentServiceImpl">
         <constructor-arg name="accountDao" ref="accountDao"/>
-    </bean>
-
-    <bean id="bookOrderComponentService" class="se.lexicon.account.component.service.BookOrderComponentServiceImpl">
-        <constructor-arg name="bookOrderDao" ref="bookOrderDao"/>
+        <constructor-arg name="orderDao" ref="orderDao"/>
     </bean>
 
 

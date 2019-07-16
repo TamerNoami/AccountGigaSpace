@@ -13,11 +13,12 @@
     </bean>
 
 
-    <bean id="accountDao" class="se.lexicon.account.component.dao.AccountDaoImpl">
+    <bean id="accountDao" class="com.seb.account.component.dao.AccountDaoImpl">
         <constructor-arg name="gigaSpace" ref="accountGigaSpace"/>
     </bean>
 
-    <bean id="bookOrderDao" class="se.lexicon.account.component.dao.BookOrderDaoImpl">
+
+    <bean id="orderDao" class="com.seb.account.component.dao.OrderDaoImpl">
         <constructor-arg name="gigaSpace" ref="accountGigaSpace"/>
     </bean>
 

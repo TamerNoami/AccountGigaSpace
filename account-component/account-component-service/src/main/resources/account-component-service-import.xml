@@ -8,9 +8,4 @@
         <constructor-arg name="beanType" value="se.lexicon.account.component.service.AccountComponentService"/>
         <constructor-arg name="beanContext" ref="frameworksBeanContext"/>
     </bean>
-
-    <bean id="bookOrderComponentService" class="com.so4it.common.bean.LazyProxyFactoryBean">
-        <constructor-arg name="beanType" value="se.lexicon.account.component.service.BookOrderComponentService"/>
-        <constructor-arg name="beanContext" ref="frameworksBeanContext"/>
-    </bean>
 </beans>

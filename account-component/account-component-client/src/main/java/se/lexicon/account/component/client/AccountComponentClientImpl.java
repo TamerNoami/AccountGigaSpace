@@ -1,6 +1,6 @@
 package se.lexicon.account.component.client;
 
-import se.lexicon.account.component.domain.Account;
+import com.lexicon.account.component.domain.Account;
 import se.lexicon.account.component.service.AccountComponentService;
 import com.so4it.common.util.object.Required;
 

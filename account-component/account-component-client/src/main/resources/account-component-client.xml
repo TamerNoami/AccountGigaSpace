@@ -8,8 +8,4 @@
         <constructor-arg name="accountComponentService" ref="accountComponentService"/>
     </bean>
 
-    <bean id="bookOrderComponentClient" class="se.lexicon.account.component.client.BookOrderComponentClientImpl">
-        <constructor-arg name="bookOrderComponentService" ref="bookOrderComponentService"/>
-    </bean>
-
 </beans>
